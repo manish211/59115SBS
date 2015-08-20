@@ -1,9 +1,9 @@
-#====================================================================
+#========================
 #Homework: 1
 #Date	 : 19-Aug-2015
 #Details : This is the first homework for Automated SE course
 #Author  : Manish Singh
-#====================================================================
+#========================
 
 
 1. To run the program, execute -> rerun "python -B okok.py" in the shell 
