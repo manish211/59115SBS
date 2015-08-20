@@ -6,7 +6,7 @@
 #====================================================================
 
 
-1. To run the program, execute -> rerun "python -B okok.py" in the shell
+1. To run the program, execute -> rerun "python -B okok.py" in the shell 
 2. Screen snap of the top level of repository
 	![repo](images/treeStructureDirectory.png)
 3. Output of commands python --version and pip help
