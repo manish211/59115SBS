@@ -10,13 +10,9 @@ print time.strftime("%H:%M:%S\n")
 
 @ok
 def _ok1():
-  print "++++"
   assert 1==1
 
-print " <<<<<<<"
-
-ok(_ok1);
-#@ok
+@ok
 def _ok2():
   assert 2==1
 
@@ -24,11 +20,25 @@ def _ok2():
 def _ok3():
   assert 3==3
 
-def _ok4():
-	assert 1==1 
-
 @ok
 def _ok4():
-  assert unittest.tries==4
-  assert unittest.fails==1
+  assert 1==1 
+
+@ok
+def _ok5():
+  assert 420==1 
+
+@ok
+def _ok6():
+  assert 421==1     
+
+@ok
+def _ok7():
+  assert 450==1 
+
+@ok
+def _ok8():
+  assert unittest.tries==8
+  assert unittest.fails==4
   print unittest.score() 
+  
