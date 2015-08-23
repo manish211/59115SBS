@@ -22,6 +22,10 @@ def do_twice(functionName,value):
     functionName(value)
     functionName(value)
     
+def do_four(functionName,value):
+    do_twice(functionName,value)
+    do_twice(functionName,value)
+    
 
     
 #do_twice(print_spam)
@@ -29,3 +33,8 @@ def do_twice(functionName,value):
 print "================"
 
 do_twice(print_spam,"spam")
+
+
+print "================"
+
+do_four(print_spam,"spam")
