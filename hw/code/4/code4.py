@@ -2,7 +2,7 @@ import random
 import math
 
 def getRandomState():
-	x = random.randrange(-10000,10000) 
+	x = random.randrange(-100000,100000) 
 	return x
 
 def neighbor():
@@ -24,14 +24,14 @@ def getEnergyAtState(x):
 
 def getMinMax():
 
-	x=random.randrange(-10000,10000)	
+	x=random.randrange(-100000,100000)	
 	e=getEnergyAtState(x)
 
 	minEnergy=e
 	maxEnergy=e
 
 	for i in range(100000):
-		x=random.randrange(-10000,10000)	
+		x=random.randrange(-100000,100000)	
 		
 		e=getEnergyAtState(x)
 	    	
