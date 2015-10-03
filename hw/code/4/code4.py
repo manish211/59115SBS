@@ -30,7 +30,7 @@ def getMinMax():
 	minEnergy=e
 	maxEnergy=e
 
-	for i in range(100000):
+	for i in range(100):
 		x=random.randrange(-100000,100000)	
 		
 		e=getEnergyAtState(x)
@@ -44,11 +44,12 @@ def getMinMax():
 	return minEnergy,maxEnergy
 
 
-def getBaseLinedEnergy(x):
+def getBaseLinedEnergy(x,minEnergy,maxEnergy):
 	e=getEnergyAtState(x)
-	minEnergy,maxEnergy = getMinMax()
+	# minEnergy,maxEnergy = getMinMax()
 	baseLinedEnergyVal = float(e-minEnergy) / (maxEnergy - minEnergy)
 	if baseLinedEnergyVal < 0:
+		print "Energy is negative -----"
 		print "======================================================"
 		print "minEnergy:",minEnergy," maxEnergy:",maxEnergy," energy e:",e," baseLinedEnergyVal:",baseLinedEnergyVal
 		print "======================================================"
@@ -61,11 +62,12 @@ def probOfAccept(old,new,temperature):
 
 def startSimAnn(emax):
 	print "started"
+	minEnergy,maxEnergy = getMinMax()
 	s0 = getRandomState();
-	e0 = getBaseLinedEnergy(s0);
+	e0 = getBaseLinedEnergy(s0,minEnergy,maxEnergy);
 	s,e=s0,e0
 	sb,eb=s,e
-	k = 100 
+	k = 100
 	kmax = k
 
 	while k > 0 and e > emax:
@@ -73,7 +75,14 @@ def startSimAnn(emax):
 		# print "Got the neighbor+++"
 		# print sn
 		# print "====="
-		en = getBaseLinedEnergy(sn)
+
+		en = getBaseLinedEnergy(sn,minEnergy,maxEnergy)
+
+		while en < 0:
+			sn = neighbor()
+			en = getBaseLinedEnergy(sn,minEnergy,maxEnergy)
+
+
 		# print "Got the baseLinedEnergy++++"
 		print "s,e:",s," ",e," ","sb,eb:",sb," ",eb," ""sn,en:",sn," ",en," "
 		if (en < eb):
