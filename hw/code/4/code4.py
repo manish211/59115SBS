@@ -2,30 +2,43 @@ import random
 
 
 def getRandomState():
-	x = randrange(-10000,10000) 
-	return x 
+	x = random.randrange(-10000,10000) 
+	return x
+
+def neighbor():
+	return getRandomState
 
 def getEnergyAtState(x):
 	f1=pow(x,2)
 	f2=pow((x-2),2)
 	return f1+f2
 
-def getBaseLinedEnergy(x):
-	
+
+def getMinMax():
+
+	x=random.randrange(-10000,10000)	
 	e=getEnergyAtState(x)
 
 	minEnergy=e
 	maxEnergy=e
 
 	while i in range(100):
+		x=random.randrange(-10000,10000)	
+		
 		e=getEnergyAtState(x)
+	    	
 		if(e<minEnergy):
 			minEnergy = e
 
 		if(e>maxEnergy):
 			maxEnergy = e
 
-	baseLinedEnergy = (sum(f1,f2)-minEnergy) / (maxEnergy - minEnergy)
+	return minEnergy,maxEnergy
+
+
+def getBaseLinedEnergy(x):
+	e=getEnergyAtState(x)
+	baseLinedEnergy = float(e-minEnergy) / (maxEnergy - minEnergy)
 	return baseLinedEnergy
 
 def probOfAccept(old,new,temperature):
@@ -41,7 +54,7 @@ def startSimAnn:
 	k = 0
 
 	while k < kmax and e > emax:
-		sn = neighbor(s)
+		sn = neighbor
 		en = getBaseLinedEnergy(sn)
 
 		if (en < eb):
