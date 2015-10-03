@@ -5,18 +5,44 @@ def getRandomState():
 	x = randrange(-10000,10000) 
 	return x 
 
+def getEnergyAtState(x):
+	f1=pow(x,2)
+	f2=pow((x-2),2)
+	return f1+f2
+
+def getBaseLinedEnergy(x):
+	
+	e=getEnergyAtState(x)
+
+	minEnergy=e
+	maxEnergy=e
+
+	while i in range(100):
+		e=getEnergyAtState(x)
+		if(e<minEnergy):
+			minEnergy = e
+
+		if(e>maxEnergy):
+			maxEnergy = e
+
+	baseLinedEnergy = (sum(f1,f2)-minEnergy) / (maxEnergy - minEnergy)
+	return baseLinedEnergy
+
+def probOfAccept(old,new,temperature):
+	probability = pow(e,(old-new)/temperature)
+	return probability
 
 
 def startSimAnn:
 	s0 = getRandomState();
-	e0 = getEnergyAtState(s0);
+	e0 = getBaseLinedEnergy(s0);
 	s,e=s0,e0
 	sb,eb=s,e
 	k = 0
 
 	while k < kmax and e > emax:
 		sn = neighbor(s)
-		en = getEnergyAtState(sn)
+		en = getBaseLinedEnergy(sn)
 
 		if (en < eb):
 			sb,eb = sn,en
@@ -26,7 +52,8 @@ def startSimAnn:
 			s,e = sn,en
 			print "+"
 		else:
-			if probOfAccept(e,en,k/kmax) < rand():
+			temperature = k/kmax
+			if probOfAccept(e,en,temperature) < rand():
 				s,e = sn,en
 				print "?"
 
