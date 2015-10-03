@@ -48,11 +48,11 @@ def getBaseLinedEnergy(x,minEnergy,maxEnergy):
 	e=getEnergyAtState(x)
 	# minEnergy,maxEnergy = getMinMax()
 	baseLinedEnergyVal = float(e-minEnergy) / (maxEnergy - minEnergy)
-	if baseLinedEnergyVal < 0:
-		print "Energy is negative -----"
-		print "======================================================"
-		print "minEnergy:",minEnergy," maxEnergy:",maxEnergy," energy e:",e," baseLinedEnergyVal:",baseLinedEnergyVal
-		print "======================================================"
+	# if baseLinedEnergyVal < 0:
+	# 	print "Energy is negative -----"
+	# 	print "======================================================"
+	# 	print "minEnergy:",minEnergy," maxEnergy:",maxEnergy," energy e:",e," baseLinedEnergyVal:",baseLinedEnergyVal
+	# 	print "======================================================"
 	return baseLinedEnergyVal
 
 def probOfAccept(old,new,temperature):
@@ -67,7 +67,7 @@ def startSimAnn(emax):
 	e0 = getBaseLinedEnergy(s0,minEnergy,maxEnergy);
 	s,e=s0,e0
 	sb,eb=s,e
-	k = 100
+	k = 10000
 	kmax = k
 
 	while k > 0 and e > emax:
