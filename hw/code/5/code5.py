@@ -112,7 +112,18 @@ def randomize_no_greed(solution=[],c):
 
 
 def randomize_with_greed(solution=[],c):
-	#pass
+	best_score = 0
+	best_solution = []
+
+	for x in xrange(1,1000):
+		solution=randomize_no_greed(solution,c)
+		score_solution = score(solution)
+		if(score_solution > best_score):
+			best_score = score_solution
+			best_solution = solution[:]
+
+	return best_solution
+
 
 def run_max_walk_sat(max_tries,max_changes,epsilon, prob):
 	best_score=0 #for maximization
