@@ -89,7 +89,8 @@ def get_valid_rand_candidates():
 			return candidate
 
 
-
+def run_max_walk_sat():
+	
 
 
 
