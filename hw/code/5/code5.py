@@ -71,6 +71,17 @@ def get_objectives(candidate=[]):
 	return objs
 
 
+def gen_rand_candidates():
+	candidate[0] = random.randrange(0,10)
+	candidate[1] = random.randrange(0,10)
+	candidate[2] = random.randrange(1,5)
+	candidate[4] = random.randrange(1,5)
+	candidate[3] = random.randrange(0,6)
+	candidate[5] = random.randrange(0,10)
+
+	return candidate
+
+
 
 
 
