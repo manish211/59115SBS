@@ -55,9 +55,22 @@ def constraint_checker(candidate = []):
 		return True
 	else
 		return False
-		
 
 
+def get_objectives(candidate=[]):
+	square = lambda x:math.pow(x,2)
+
+	objs = []
+
+	objs[0] = -(25*square(candidate[0] - 2) + square(candidate[1] -2)
+		+ square(candidate[2] - 1)*square(candidate[3] - 4)
+		+ square(candidate[4] - 1))
+
+	objs[1] = square(candidate[0]) + square(candidate[1])
+			  +square(candidate[2]) + square(candidate[3])
+			  +square(candidate[4]) + square(candidate[5])
+
+	return objs
 
 
 
