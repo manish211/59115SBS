@@ -67,7 +67,7 @@ def startSimAnn(emax):
 	e0 = getBaseLinedEnergy(s0,minEnergy,maxEnergy);
 	s,e=s0,e0
 	sb,eb=s,e
-	k = 10000
+	k = 100000000
 	kmax = k
 
 	while k > 0 and e > emax:
@@ -119,5 +119,5 @@ def startSimAnn(emax):
 
 if __name__ == "__main__":
 	print "Starting Simulated Annealer : Hold on tight!"
-	emax = 0.000000001
+	emax = 0.00000001
 	startSimAnn(emax)
