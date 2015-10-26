@@ -131,6 +131,25 @@ def score(solution=[]):
 	normalized_sum = raw_sum/ (max - min)
 	return normalized_sum
 
+def getMinMax():
+	min_score = 999999999
+	max_score = -999999999
+	
+	for x in xrange(1,9999999):
+		candidate = get_valid_rand_candidates()
+		objs = get_objectives(candidate)
+		raw_sum = objs[0] + objs[1]	
+		if raw_sum > max_score:
+			max_score = raw_sum
+		if raw_sum < min_score:
+			min_score = raw_score
+
+	return (min_score,max_score)
+
+	
+
+
+
 def run_max_walk_sat(max_tries,max_changes,epsilon, prob):
 	best_score=0 #for maximization
 	best_solution=[]
