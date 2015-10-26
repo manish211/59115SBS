@@ -111,22 +111,21 @@ def randomize_no_greed(solution=[],c):
 
 
 
-def randomize_with_greed(solution=[],c):
+def randomize_with_greed(solution=[],c,min,max):
 	best_score = 0
 	best_solution = []
 
 	for x in xrange(1,1000):
 		solution=randomize_no_greed(solution,c)
-		score_solution = score(solution)
+		score_solution = score(solution,min,max)
 		if(score_solution > best_score):
 			best_score = score_solution
 			best_solution = solution[:]
 
 	return best_solution
 
-def score(solution=[]):
+def score(solution=[],min,max):
 	objs = get_objectives(solution)
-	min,max = getMinMax()
 	raw_sum = objs[0] + objs[1]
 	normalized_sum = raw_sum/ (max - min)
 	return normalized_sum
@@ -154,11 +153,17 @@ def run_max_walk_sat(max_tries,max_changes,epsilon, prob):
 	best_score=0 #for maximization
 	best_solution=[]
 
+	# Compute min, max only once and use it for getting score
+	# multiple times. This removes unnecessary duplication of
+	# heavy computation
+	min,max = getMinMax()  #Get min max first for baselining
+
+
 	for i in xrange(1,max_tries):
 		solution = get_valid_rand_candidates()
 
 		for j in xrange(1,max_changes):
-			score_solution = score(solution)
+			score_solution = score(solution,min,max)
 			if score_solution > epsilon:
 				return "success",solution
 
