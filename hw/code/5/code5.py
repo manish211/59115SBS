@@ -88,9 +88,45 @@ def get_valid_rand_candidates():
 		if((constraint_checker(candidate)) and (var_bound_checker(candidate))):
 			return candidate
 
+def randomize_no_greed(solution=[],c):
+	#pass
 
-def run_max_walk_sat():
+def randomize_with_greed(solution=[],c):
+	#pass
 	
+def run_max_walk_sat(max_tries,max_changes,epsilon, prob):
+	best_score=0 #for maximization
+	best_solution=[]
+
+	for i in xrange(1,max_tries):
+		solution = get_valid_rand_candidates()
+
+		for j in xrange(1,max_changes):
+			score_solution = score(solution)
+			if score_solution > epsilon:
+				return "success",solution
+
+		#Just for logging the best solution seen so far
+		if score_solution > best_score:
+			best_score = score_solution
+			best_solution=solution[:]
+
+		c = random.choice(solution)
+
+		if prob < random():
+			solution = randomize_no_greed(solution,c)
+			print "?"
+		else:
+			solution = randomize_with_greed(solution,c)
+			print "!"
+
+	return "failure", best_solution, best_score
+
+
+
+
+
+
 
 
 
