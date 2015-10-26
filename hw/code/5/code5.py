@@ -82,6 +82,13 @@ def gen_rand_candidates():
 	return candidate
 
 
+def get_valid_rand_candidates():
+	while True:
+		candidate = gen_rand_candidates
+		if((constraint_checker(candidate)) and (var_bound_checker(candidate)))
+			return candidate
+
+
 
 
 
