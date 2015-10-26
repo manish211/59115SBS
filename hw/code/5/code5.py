@@ -89,11 +89,31 @@ def get_valid_rand_candidates():
 			return candidate
 
 def randomize_no_greed(solution=[],c):
-	#pass
+	if(c == 0):
+		solution[0] = random.randrange(0,10)
+
+	if(c == 1):
+		solution[1] = random.randrange(0,10)
+
+	if(c == 2):
+		solution[2] = random.randrange(1,5)
+
+	if(c == 4):
+		solution[4] = random.randrange(1,5)
+
+	if(c == 3):
+		solution[3] = random.randrange(0,6)
+
+	if(c == 5):
+		solution[5] = random.randrange(0,10)
+
+	return solution
+
+
 
 def randomize_with_greed(solution=[],c):
 	#pass
-	
+
 def run_max_walk_sat(max_tries,max_changes,epsilon, prob):
 	best_score=0 #for maximization
 	best_solution=[]
