@@ -145,8 +145,6 @@ def getMinMax():
 
 	return (min_score,max_score)
 
-	
-
 
 
 def run_max_walk_sat(max_tries,max_changes,epsilon, prob):
@@ -184,6 +182,14 @@ def run_max_walk_sat(max_tries,max_changes,epsilon, prob):
 	return "failure", best_solution, best_score
 
 
+
+if __name__ == "__main__":
+	print "Starting Max Walk Sat Algorithm : Hold on tight!"
+	epsilon = 0.00000001
+	max_tries = 100000
+	max_changes = 2000
+	prob = 0.5
+	run_max_walk_sat(max_tries, max_changes, epsilon, prob)
 
 
 
