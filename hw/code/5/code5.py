@@ -124,6 +124,12 @@ def randomize_with_greed(solution=[],c):
 
 	return best_solution
 
+def score(solution=[]):
+	objs = get_objectives(solution)
+	min,max = getMinMax()
+	raw_sum = objs[0] + objs[1]
+	normalized_sum = raw_sum/ (max - min)
+	return normalized_sum
 
 def run_max_walk_sat(max_tries,max_changes,epsilon, prob):
 	best_score=0 #for maximization
