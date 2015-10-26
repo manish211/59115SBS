@@ -24,7 +24,7 @@ def  var_bound_checker(candidate = []):
 
 	if( true_count == 6):
 		return True
-	else
+	else:
 		return False
 
 
@@ -49,11 +49,11 @@ def constraint_checker(candidate = []):
 
 	constraints[5] = make_cube(candidate[4] - 3) + candidate[5] - 4
 
-	if ( 0 <= constraints[0] ) and ( 0 <= constraints[1] ) 
+	if (( 0 <= constraints[0] ) and ( 0 <= constraints[1] ) 
 	and ( 0 <= constraints[2] ) and ( 0 <= constraints[3] )
-	and ( 0 <= constraints[4] ) and ( 0 <= constraints[5] ):
+	and ( 0 <= constraints[4] ) and ( 0 <= constraints[5] )):
 		return True
-	else
+	else:
 		return False
 
 
@@ -66,9 +66,7 @@ def get_objectives(candidate=[]):
 		+ square(candidate[2] - 1)*square(candidate[3] - 4)
 		+ square(candidate[4] - 1))
 
-	objs[1] = square(candidate[0]) + square(candidate[1])
-			  +square(candidate[2]) + square(candidate[3])
-			  +square(candidate[4]) + square(candidate[5])
+	objs[1] = square(candidate[0]) + square(candidate[1])+square(candidate[2]) + square(candidate[3])+square(candidate[4]) + square(candidate[5])
 
 	return objs
 
