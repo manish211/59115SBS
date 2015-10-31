@@ -111,15 +111,33 @@ def randomize_no_greed(solution,c):
 	return solution
 
 
+def get_start_end(solution,c,steps):
+	if((c == 0) or (c == 1) or (c == 5)):
+		start = 0
+		end = 10
+
+	if((c == 2) or (c == 4)):
+		start = 1
+		end = 5
+
+	if(c == 3):
+		start = 0
+		end = 6
+
+	return (start,end)
+
 
 def randomize_with_greed(solution,c,min,max):
 	best_score = 0
 	best_solution = [0,0,0,0,0,0]
-	# print "RANDOMIZE WITH GREED SOLUTION:", solution
-	for x in xrange(1,1000):
-		solution=randomize_no_greed(solution,c)
-		# print "BEFORE CALLING SCORE, PRINT SOLUTION:", solution, "  value of x:", x
-		score_solution = score(solution,min,max)
+	steps = 1000
+	start,end = get_start_end(solution,c,steps);
+	step_size = (end - start)/steps	
+	for x in xrange(1,steps):
+		# solution=randomize_no_greed(solution,c)    # Do this in steps
+		solution[c] = start + x*step_size
+		raw_score_solution = raw_score(solution)
+		score_solution = raw_score_solution/(max-min)
 		if(score_solution > best_score):
 			best_score = score_solution
 			best_solution = solution[:]
@@ -127,12 +145,9 @@ def randomize_with_greed(solution,c,min,max):
 	return best_solution
 
 def raw_score(solution):
-	# print "BEFORE CALLING OBJECTIVES, PRINT SOLUTION:", solution
 	objs = get_objectives(solution)
 	raw_sum = objs[0] + objs[1]
 	return raw_sum
-	# normalized_sum = raw_sum/ (max - min)
-	# return normalized_sum
 
 def getMinMax():
 	min_score = 999999999
@@ -140,16 +155,11 @@ def getMinMax():
 	
 	for x in xrange(1,1000):
 		candidate = get_valid_rand_candidates()
-		# print "BEFORE CALLING OBJECTIVES, PRINT CANDIDATE:", candidate
-		objs = get_objectives(candidate)
-		raw_sum = objs[0] + objs[1]	
+		raw_sum = raw_score(candidate)
 		if raw_sum > max_score:
 			max_score = raw_sum
 		if raw_sum < min_score:
 			min_score = raw_sum
-
-	# if min_score < 0:
-	# 	min_score = 0
 
 	return (min_score,max_score)
 
@@ -160,8 +170,6 @@ def run_max_walk_sat(max_tries,max_changes,epsilon, prob):
 	best_solution=[0,0,0,0,0,0]
 
 	# Compute min, max only once and use it for getting score
-	# multiple times. This removes unnecessary duplication of
-	# heavy computation
 	min,max = getMinMax()  #Get min max first for baselining
 
 	# print "min:", min
@@ -176,8 +184,13 @@ def run_max_walk_sat(max_tries,max_changes,epsilon, prob):
 
 		for j in xrange(1,max_changes):
 			# print "BEFORE CALLING SCORE, PRINT SOLUTION:", solution , " value of j:", j
-			score_solution = score(solution,min,max)
-			if score_solution > epsilon:
+			raw_score_solution = raw_score(solution)
+			if raw_score_solution > max:
+				max = raw_score_solution      #Get the new max if current score is better than max : Changing the boundaries
+
+			score_solution = raw_score_solution/(max-min)  #Normalize	
+
+			if (score_solution - epsilon) > 0.01:
 				print "Got solution ...exiting"
 				print "score_solution:", score_solution
 				return "success",solution
@@ -193,10 +206,14 @@ def run_max_walk_sat(max_tries,max_changes,epsilon, prob):
 
 			if prob < random.random():
 				solution = randomize_no_greed(solution,c)
+				while(constraint_checker(solution)):
+					solution = randomize_no_greed(solution,c)
 				print "?",
 			else:
 				solution = randomize_with_greed(solution,c,min,max)
-				print "!",
+				while(constraint_checker(solution)):
+					solution = randomize_with_greed(solution,c,min,max)
+				print "+",
 			
 			if (i%50 ==0):
 				print ""
@@ -209,7 +226,7 @@ def run_max_walk_sat(max_tries,max_changes,epsilon, prob):
 
 if __name__ == "__main__":
 	print "Starting Max Walk Sat Algorithm : Hold on tight!"
-	epsilon = 0.9999999
+	epsilon = 0.978
 	max_tries = 10000
 	max_changes = 2000
 	prob = 0.5
