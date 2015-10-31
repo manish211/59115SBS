@@ -145,7 +145,7 @@ def randomize_with_greed(solution,c,min,max):
 		if (constraint_checker(solution)) and (score_solution > best_score):
 			best_score = score_solution
 			best_solution = solution[:]
-			
+
 
 	return best_solution
 
@@ -226,15 +226,10 @@ def run_max_walk_sat(max_tries,max_changes,epsilon, prob):
 				solution = randomize_with_greed(solution,c,min,max)
 				counter2 =0;
 				# print " ---------"
-				while(constraint_checker(solution)):
-					# print "solution:", solution
-					# print "c=", c
-					if( counter2 %100 == 0):
-						print "^",
-						flush()
-					counter2 += 1	
-					solution = randomize_with_greed(solution,c,min,max)
-				print "+",
+				if (constraint_checker(solution)):
+					print "+",
+				else:
+					print "."
 			
 			if (j%50 ==0 or i%50==0):
 				print ""
