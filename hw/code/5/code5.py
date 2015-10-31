@@ -35,9 +35,9 @@ def constraint_checker(candidate = []):
 
 	make_cube = lambda x: math.pow(x,3)
 
-	constraints = []
+	constraints = [0,0,0,0,0,0]
 
-	constraints[0] = candidate[0] + candidate[1] -2
+	constraints[0] = candidate[0] + candidate[1] - 2
 
 	constraints[1] = 6 - candidate[0] - candidate[1]
 
@@ -60,7 +60,7 @@ def constraint_checker(candidate = []):
 def get_objectives(candidate=[]):
 	square = lambda x:math.pow(x,2)
 
-	objs = []
+	objs = [0,0]  # Empty list of size 2
 
 	objs[0] = -(25*square(candidate[0] - 2) + square(candidate[1] -2)
 		+ square(candidate[2] - 1)*square(candidate[3] - 4)
@@ -72,6 +72,7 @@ def get_objectives(candidate=[]):
 
 
 def gen_rand_candidates():
+	candidate = [0,0,0,0,0,0]
 	candidate[0] = random.randrange(0,10)
 	candidate[1] = random.randrange(0,10)
 	candidate[2] = random.randrange(1,5)
@@ -84,11 +85,11 @@ def gen_rand_candidates():
 
 def get_valid_rand_candidates():
 	while True:
-		candidate = gen_rand_candidates
+		candidate = gen_rand_candidates()
 		if((constraint_checker(candidate)) and (var_bound_checker(candidate))):
 			return candidate
 
-def randomize_no_greed(solution=[],c):
+def randomize_no_greed(solution,c):
 	if(c == 0):
 		solution[0] = random.randrange(0,10)
 
@@ -111,12 +112,13 @@ def randomize_no_greed(solution=[],c):
 
 
 
-def randomize_with_greed(solution=[],c,min,max):
+def randomize_with_greed(solution,c,min,max):
 	best_score = 0
-	best_solution = []
-
+	best_solution = [0,0,0,0,0,0]
+	# print "RANDOMIZE WITH GREED SOLUTION:", solution
 	for x in xrange(1,1000):
 		solution=randomize_no_greed(solution,c)
+		# print "BEFORE CALLING SCORE, PRINT SOLUTION:", solution, "  value of x:", x
 		score_solution = score(solution,min,max)
 		if(score_solution > best_score):
 			best_score = score_solution
@@ -124,24 +126,30 @@ def randomize_with_greed(solution=[],c,min,max):
 
 	return best_solution
 
-def score(solution=[],min,max):
+def raw_score(solution):
+	# print "BEFORE CALLING OBJECTIVES, PRINT SOLUTION:", solution
 	objs = get_objectives(solution)
 	raw_sum = objs[0] + objs[1]
-	normalized_sum = raw_sum/ (max - min)
-	return normalized_sum
+	return raw_sum
+	# normalized_sum = raw_sum/ (max - min)
+	# return normalized_sum
 
 def getMinMax():
 	min_score = 999999999
 	max_score = -999999999
 	
-	for x in xrange(1,9999999):
+	for x in xrange(1,1000):
 		candidate = get_valid_rand_candidates()
+		# print "BEFORE CALLING OBJECTIVES, PRINT CANDIDATE:", candidate
 		objs = get_objectives(candidate)
 		raw_sum = objs[0] + objs[1]	
 		if raw_sum > max_score:
 			max_score = raw_sum
 		if raw_sum < min_score:
-			min_score = raw_score
+			min_score = raw_sum
+
+	# if min_score < 0:
+	# 	min_score = 0
 
 	return (min_score,max_score)
 
@@ -149,47 +157,64 @@ def getMinMax():
 
 def run_max_walk_sat(max_tries,max_changes,epsilon, prob):
 	best_score=0 #for maximization
-	best_solution=[]
+	best_solution=[0,0,0,0,0,0]
 
 	# Compute min, max only once and use it for getting score
 	# multiple times. This removes unnecessary duplication of
 	# heavy computation
 	min,max = getMinMax()  #Get min max first for baselining
 
+	# print "min:", min
+	# print "max:", max
+
+	if min < 0:
+		min = 0
+
 
 	for i in xrange(1,max_tries):
 		solution = get_valid_rand_candidates()
 
 		for j in xrange(1,max_changes):
+			# print "BEFORE CALLING SCORE, PRINT SOLUTION:", solution , " value of j:", j
 			score_solution = score(solution,min,max)
 			if score_solution > epsilon:
+				print "Got solution ...exiting"
+				print "score_solution:", score_solution
 				return "success",solution
 
-		#Just for logging the best solution seen so far
-		if score_solution > best_score:
-			best_score = score_solution
-			best_solution=solution[:]
+			#Just for logging the best solution seen so far
+			if score_solution > best_score:
+				best_score = score_solution
+				best_solution=solution[:]
 
-		c = random.choice(solution)
+			c = random.randint(0,(len(solution) - 1))  #c is a random index picked up from 0 to length of solution list
 
-		if prob < random():
-			solution = randomize_no_greed(solution,c)
-			print "?"
-		else:
-			solution = randomize_with_greed(solution,c)
-			print "!"
+			# print "random index c=", c
 
-	return "failure", best_solution, best_score
+			if prob < random.random():
+				solution = randomize_no_greed(solution,c)
+				print "?",
+			else:
+				solution = randomize_with_greed(solution,c,min,max)
+				print "!",
+			
+			if (i%50 ==0):
+				print ""
+
+	print "best_solution:= ", best_solution
+	print "best_score:=", best_score
+	return ("failure", best_solution, best_score)
 
 
 
 if __name__ == "__main__":
 	print "Starting Max Walk Sat Algorithm : Hold on tight!"
-	epsilon = 0.00000001
-	max_tries = 100000
+	epsilon = 0.9999999
+	max_tries = 10000
 	max_changes = 2000
 	prob = 0.5
 	run_max_walk_sat(max_tries, max_changes, epsilon, prob)
+
 
 
 
