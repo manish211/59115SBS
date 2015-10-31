@@ -176,6 +176,7 @@ def flush():
 def run_max_walk_sat(max_tries,max_changes,epsilon, prob):
 	best_score=0 #for maximization
 	best_solution=[0,0,0,0,0,0]
+	is_sol_found=False
 
 	# Compute min, max only once and use it for getting score
 	min,max = getMinMax()  #Get min max first for baselining
@@ -186,12 +187,11 @@ def run_max_walk_sat(max_tries,max_changes,epsilon, prob):
 	if min < 0:
 		min = 0
 
-
+	counter = 0
 	for i in xrange(1,max_tries):
 		solution = get_valid_rand_candidates()
 
 		for j in xrange(1,max_changes):
-			# print "BEFORE CALLING SCORE, PRINT SOLUTION:", solution , " value of j:", j
 			raw_score_solution = raw_score(solution)
 			if raw_score_solution > max:
 				max = raw_score_solution      #Get the new max if current score is better than max : Changing the boundaries
@@ -202,44 +202,56 @@ def run_max_walk_sat(max_tries,max_changes,epsilon, prob):
 				print "Got solution ...exiting"
 				print "score_solution:", score_solution
 				print "epsilon - score_solution=", (epsilon - score_solution)
-				return "success",solution
-
-			#Just for logging the best solution seen so far
+				is_sol_found = True
+				best_score = score_solution
+				break
+			#Just for logging the best solution so far		
 			if score_solution > best_score:
 				best_score = score_solution
-				best_solution=solution[:]
+				best_solution = solution[:]
 
 			c = random.randint(0,(len(solution) - 1))  #c is a random index picked up from 0 to length of solution list
-
-			# print "random index c=", c
 
 			if prob < random.random():
 				solution = randomize_no_greed(solution,c)
 				counter1 = 0
-				while(constraint_checker(solution)):
+				while(constraint_checker(solution) and counter1 <=1000):
 					if(counter1%100 == 0):
 						print "$",
+						counter += 1
 						flush()
 					solution = randomize_no_greed(solution,c)
+					counter1 += 1
 				print "?",
+				counter += 1
 			else:
 				solution = randomize_with_greed(solution,c,min,max)
 				counter2 =0;
 				# print " ---------"
 				if (constraint_checker(solution)):
 					print "+",
+					counter += 1
 				else:
-					print "."
+					print ".",
+					counter += 1
 			
-			if (j%50 ==0 or i%50==0):
-				print ""
-				flush()
+		if counter%50 == 0:
+			print ""
+			flush()
 		
-		if (i == 100):
-			print "=================="
-		
-	print "best_solution:= ", best_solution
-	print "best_score:=", best_score
+		print "\n",i,":=================="
+
+		if is_sol_found == True:
+			break
+
+	
+	print "========================================"
+	print "MAXWALK ALGORITHM RESULT SUMMARY"
+	print "========================================"
+	print "BEST SOLUTION FOUND:= ", best_solution
+	print "BEST SCORE FOUND:=", best_score
+	print "REQUESTED THRESHOLD:=", epsilon
+	print "REQUESTED APPROX. ERROR:=", 0.005
 	return ("failure", best_solution, best_score)
 
 
@@ -248,7 +260,7 @@ if __name__ == "__main__":
 	print "Starting Max Walk Sat Algorithm : Hold on tight!"
 	print "Notations: ? means global search\n + means local search\n $,^ are constraint checks performed in global and local search respectively\n"
 	print "====================OBSERVE OUTPUT BELOW========================="
-	epsilon = 0.978
+	epsilon = 0.689
 	max_tries = 1000
 	max_changes = 200
 	prob = 0.5
