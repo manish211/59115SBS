@@ -1,5 +1,6 @@
 import random
 import math
+import sys
 
 def  var_bound_checker(candidate = []):
 	true_count = 0
@@ -132,15 +133,19 @@ def randomize_with_greed(solution,c,min,max):
 	best_solution = [0,0,0,0,0,0]
 	steps = 1000
 	start,end = get_start_end(solution,c,steps);
-	step_size = (end - start)/steps	
+
+	step_size = float(end - start)/steps	
 	for x in xrange(1,steps):
+		# print "start=",start," end=",end, " step_size=", step_size, " value of X=", x
 		# solution=randomize_no_greed(solution,c)    # Do this in steps
 		solution[c] = start + x*step_size
+		# print "solution[c]:=", solution[c], " value of C=", c
 		raw_score_solution = raw_score(solution)
 		score_solution = raw_score_solution/(max-min)
-		if(score_solution > best_score):
+		if (constraint_checker(solution)) and (score_solution > best_score):
 			best_score = score_solution
 			best_solution = solution[:]
+			
 
 	return best_solution
 
@@ -163,6 +168,9 @@ def getMinMax():
 
 	return (min_score,max_score)
 
+
+def flush():
+	sys.stdout.flush()
 
 
 def run_max_walk_sat(max_tries,max_changes,epsilon, prob):
@@ -190,9 +198,10 @@ def run_max_walk_sat(max_tries,max_changes,epsilon, prob):
 
 			score_solution = raw_score_solution/(max-min)  #Normalize	
 
-			if (score_solution - epsilon) > 0.01:
+			if (score_solution > 0) and ((epsilon - score_solution) > 0 and (epsilon - score_solution) < 0.005):
 				print "Got solution ...exiting"
 				print "score_solution:", score_solution
+				print "epsilon - score_solution=", (epsilon - score_solution)
 				return "success",solution
 
 			#Just for logging the best solution seen so far
@@ -206,18 +215,34 @@ def run_max_walk_sat(max_tries,max_changes,epsilon, prob):
 
 			if prob < random.random():
 				solution = randomize_no_greed(solution,c)
+				counter1 = 0
 				while(constraint_checker(solution)):
+					if(counter1%100 == 0):
+						print "$",
+						flush()
 					solution = randomize_no_greed(solution,c)
 				print "?",
 			else:
 				solution = randomize_with_greed(solution,c,min,max)
+				counter2 =0;
+				# print " ---------"
 				while(constraint_checker(solution)):
+					# print "solution:", solution
+					# print "c=", c
+					if( counter2 %100 == 0):
+						print "^",
+						flush()
+					counter2 += 1	
 					solution = randomize_with_greed(solution,c,min,max)
 				print "+",
 			
-			if (i%50 ==0):
+			if (j%50 ==0 or i%50==0):
 				print ""
-
+				flush()
+		
+		if (i == 100):
+			print "=================="
+		
 	print "best_solution:= ", best_solution
 	print "best_score:=", best_score
 	return ("failure", best_solution, best_score)
@@ -226,9 +251,11 @@ def run_max_walk_sat(max_tries,max_changes,epsilon, prob):
 
 if __name__ == "__main__":
 	print "Starting Max Walk Sat Algorithm : Hold on tight!"
+	print "Notations: ? means global search\n + means local search\n $,^ are constraint checks performed in global and local search respectively\n"
+	print "====================OBSERVE OUTPUT BELOW========================="
 	epsilon = 0.978
-	max_tries = 10000
-	max_changes = 2000
+	max_tries = 1000
+	max_changes = 200
 	prob = 0.5
 	run_max_walk_sat(max_tries, max_changes, epsilon, prob)
 
