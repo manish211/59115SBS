@@ -60,8 +60,8 @@ class Golinski(Model):
         constCheckerVec[0] = ((1.0)/(self.decisionVec[0]*math.pow(self.decisionVec[1],2)*self.decisionVec[2])) - (1.0/27.0) 
         constCheckerVec[1] = ((1.0)/(self.decisionVec[0]*math.pow(self.decisionVec[1],2)*self.decisionVec[2])) - (1.0/27.0)  
 
-        constCheckerVec[2] = (math.pow(self.decisionVec[3],3)/(self.decisionVec[1]*math.pow(self.decisionVec[2],2)*math.pow(self.decisionVec[5],4)) - (1.0/1.93) 
-        constCheckerVec[3] = (math.pow(self.decisionVec[4],3)/(self.decisionVec[1]*math.pow(self.decisionVec[2],1)*math.pow(self.decisionVec[6],4)) - (1.0/1.93) 
+        constCheckerVec[2] = (math.pow(self.decisionVec[3],3)/(self.decisionVec[1]*math.pow(self.decisionVec[2],2)*math.pow(self.decisionVec[5],4))) - (1.0/1.93) 
+        constCheckerVec[3] = (math.pow(self.decisionVec[4],3)/(self.decisionVec[1]*math.pow(self.decisionVec[2],1)*math.pow(self.decisionVec[6],4))) - (1.0/1.93) 
 
         constCheckerVec[4] = self.decisionVec[1]*self.decisionVec[2] - 40
         constCheckerVec[5] = (self.decisionVec[0]/self.decisionVec[1]) - 12
