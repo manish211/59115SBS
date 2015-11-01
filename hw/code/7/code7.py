@@ -1,4 +1,6 @@
 from model import *
+import math
+import random
 
 
 def lo(curr_candidate_sol,d):
@@ -95,7 +97,11 @@ def a(lst):
 	return lst[n(len(lst))]
 
 
-
+if __name__ == "main":
+	print "Starting Differential Evolution. Hold on tight."
+	print "================================================"
+	model=Golinski
+	de(model)
 
 
 
