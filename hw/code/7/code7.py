@@ -97,7 +97,7 @@ def a(lst):
 	return lst[n(len(lst))]
 
 
-if __name__ == "main":
+if __name__ == "__main__":
 	print "Starting Differential Evolution. Hold on tight."
 	print "================================================"
 	model=Golinski

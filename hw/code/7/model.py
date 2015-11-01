@@ -68,7 +68,7 @@ class Golinski(Model):
         constCheckerVec[6] = 5 - (self.decisionVec[0]/self.decisionVec[1]) 
         constCheckerVec[7] = 1.9 - self.decisionVec[3] + 1.5*self.decisionVec[5] 
         constCheckerVec[8] = 1.9 - self.decisionVec[4] + 1.1*self.decisionVec[6] 
-        obj_temp           = self.getobj
+        obj_temp           = self.getobj()
         constCheckerVec[9] = obj_temp[1] - 1300
         a                  = 745.0*self.decisionVec[4]/(self.decisionVec[1]*self.decisionVec[3])
         b                  = 1.575*math.pow(10,8)
@@ -89,11 +89,11 @@ class Golinski(Model):
 
         # Temporary values for f1
         tmp1 = (10*giveSquaredValue(self.decisionVec[2])/3) + 14.933*self.decisionVec[2] - 43.0934
-        tmp2 = 1.508*self.decisionVec[0](giveSquaredValue(self.decisionVec[5]) + giveSquaredValue(self.decisionVec[6]))
+        tmp2 = 1.508*(self.decisionVec[0])*(giveSquaredValue(self.decisionVec[5]) + giveSquaredValue(self.decisionVec[6]))
         tmp3 = 7.477*(giveCubeValue(self.decisionVec[5]) + giveCubeValue(self.decisionVec[6]))
         tmp4 = 0.7854*(self.decisionVec[3]*giveSquaredValue(self.decisionVec[5]) + self.decisionVec[4]*giveSquaredValue(6))
 
-        f1   = 0.7854*self.decisionVec[0]*giveSquaredValue(self.decisionVec[1])(tmp1) - tmp2 + tmp3 + tmp4
+        f1   = 0.7854*self.decisionVec[0]*giveSquaredValue(self.decisionVec[1])*(tmp1) - tmp2 + tmp3 + tmp4
 
         # Temporary values for f2
         x    = 745.0*self.decisionVec[3]/(self.decisionVec[1]*self.decisionVec[2])
