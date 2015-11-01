@@ -18,6 +18,9 @@ def decisions(curr_candidate_sol):
 def trim(x,d):
 	return max(lo(d), min(x,hi(d)))
 
+def n(max):
+	return int(random.uniform(0,max))
+
 def score(thingObj,model):
 	temp_obj = model()
 	temp_obj.decisionVec = thingObj.have
@@ -27,11 +30,15 @@ def score(thingObj,model):
 	dist_from_hell =sq_root(square(f1) + square(f2))
 	return dist_from_hell 
 
-
+class Thing():
+	id = 0
+	def __init__(self, **entries):
+		self.id = Thing.id = Thing.id + 1
+		self.__dict__.update(entries)
 
 def candidate(model):
 	curr_candidate_sol = model()
-	something = [lo(d) + n(hi(curr_candidate_sol,d) - lo(curr_candidate_sol,d)) for d in decisions(curr_candidate_sol)]
+	something = [lo(curr_candidate_sol,d) + n(hi(curr_candidate_sol,d) - lo(curr_candidate_sol,d)) for d in decisions(curr_candidate_sol)]
 	new = Thing()
 	new.have = something
 	new.score = score(new,model)
