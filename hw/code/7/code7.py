@@ -15,8 +15,8 @@ def decisions(curr_candidate_sol):
 	return [_ for _ in xrange(curr_candidate_sol.numOfDec)]
 
 
-def trim(x,d):
-	return max(lo(d), min(x,hi(d)))
+def trim(curr_candidate_sol,x,d):
+	return max(lo(curr_candidate_sol,d), min(x,hi(curr_candidate_sol,d)))
 
 def n(max):
 	return int(random.uniform(0,max))
@@ -50,26 +50,30 @@ def de(model, max = 100, f = 0.75, cf = 0.3, epsilon = 0.01):
 	np = info_model_candidate.numOfDec * 10
 	frontier = [candidate(model) for _ in xrange(np)]
 	for k in xrange(max):
-		total,n = update(f,cf,frontier)
+		total,n = update(f,cf,frontier,info_model_candidate,model)
 		if total/n > (1 - epsilon):
 			break
 	for x in frontier:
-		print x
+		print "print x:",x.id," ",x.have, x.score
 	return frontier
 
-def update(f,cf, frontier, total=0.0, n=0):
+def update(f,cf, frontier, info_model_candidate,model,total=0.0, n=0):
 	for x in frontier:
 		s = x.score
-		new = extrapolate(frontier,x,f,cf)
+		new = extrapolate(frontier,x,f,cf,info_model_candidate,model)
 		if new.score > s:
 			x.score = new.score
 			x.have = new.have
+		
+		total +=x.score
+		print "x.score:", x.score
+		print "total:", total
 		total +=x.score
 		n += 1
 	return total,n
 
-def extrapolate(frontier, one, f, cf):
-	out = Thing(id = one.id, have = copy(one.have))
+def extrapolate(frontier, one, f, cf,info_model_candidate,model):
+	out = Thing(id = one.id, have = one.have[:])
 	two, three, four = threeOthers(frontier, one)
 	changed = False
 	numOfDecisions = len(out.have)
@@ -78,11 +82,11 @@ def extrapolate(frontier, one, f, cf):
 		if random.random() < cf:
 			changed = True
 			new = x + f*(y-z)
-			out.have[d] = trim(new,d)
+			out.have[d] = trim(info_model_candidate,new,d)
 	if not changed:
 		d = a([d for d in range(numOfDecisions)])
-		out.have[d] = two[d]
-	out.score = score(out)
+		out.have[d] = two.have[d]
+	out.score = score(out,model)
 	return out
 
 
